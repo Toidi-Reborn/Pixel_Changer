@@ -19,27 +19,6 @@ newFileName = ""
 
 class imageload:
     
-    def __init__(self):
-        tacp = "dfgfdsfg"
-
-
-        '''
-        img = Image.open('images/myLogoSprite.png')
-        img = img.convert('RGBA')
-        data = img.getdata()
-
-        newData = []
-        for item in data:
-            if item[0] == 255 and item[1] == 255 and item[2] == 255:
-                newData.append((255, 255, 255, 0))
-            else:
-                newData.append(item)
-
-        img.putdata(newData)
-        img.save('images/myLogoSpriteLightdsfsdfdfsfsd.png', 'PNG')
-        
-        '''
-    
 
     def openFile(self):
         from PIL import Image
@@ -53,18 +32,34 @@ class imageload:
         newFileName =  filedialog.asksaveasfilename(initialdir = "/",title = "Select file",filetypes = (("png files","*.png"),("all files","*.*")))
         newFileNameBox.set(newFileName)
 
-    def submit(self):
+
+    def copyFile(self):
+        x = fileToChangeBox.get()
+        newFileNameBox.set(x)
+
+
+    def submit(self, x):
         load = fileToChangeBox.get()
         save = newFileNameBox.get()
         print(load, save)
         data = self.img.getdata()
 
         newData = []
-        for item in data:
-            if item[0] >= 200 and item[1] >= 200 and item[2] >= 200:
-                newData.append((255, 255, 255, 0))
-            else:
-                newData.append(item)
+        if x == "255":
+            for item in data:
+                if item[0] == 255 and item[1] == 255 and item[2] == 255:
+                    newData.append((255, 255, 255, 0))
+                else:
+                    newData.append(item)
+
+
+        if x == "245":
+            for item in data:
+                if item[0] >= 245 and item[1] >= 245 and item[2] >= 245:
+                    newData.append((255, 255, 255, 0))
+                else:
+                    newData.append(item)
+
 
         self.img.putdata(newData)
         self.img.save(save, 'PNG')
@@ -91,13 +86,16 @@ class frameSetUp:
     def midFrame(self):
         Label(self.mFrame, text="File to Change: ").grid(row=0, column=0, sticky=N)
         Entry(self.mFrame, textvariable=fileToChangeBox, width=100).grid(row=0, column=1, padx=5)
-        Button(self.mFrame, text="Select File", command= lambda x="sfdsf": ll.openFile()).grid(row=0, column=2, padx=5)
+        Button(self.mFrame, text="Select File", command= lambda x="sfdsf": ll.openFile()).grid(row=0, column=2, padx=5, pady=1)
         
-        Label(self.mFrame, text="New File: ").grid(row=1, column=0, sticky=N)
-        Entry(self.mFrame, textvariable=newFileNameBox, width=100).grid(row=1, column=1, padx=5)
+        Button(self.mFrame, text="Overwrite File", command= lambda x="dothis": ll.copyFile()).grid(row=1, column=0, columnspan=3, padx=5, pady=1)
+        
+        Label(self.mFrame, text="New File: ").grid(row=2, column=0, sticky=N)
+        Entry(self.mFrame, textvariable=newFileNameBox, width=100).grid(row=2, column=1, padx=1)
         #Label(self.mFrame, text="Overight Original File? ").grid(row=1, column=0, columnspan=3, sticky=N)
-        Button(self.mFrame, text="Select Location", command= lambda x="dfsf": ll.saveLocation()).grid(row=1, column=2, padx=5)
-        Button(self.mFrame, text="Process Image Change", command= lambda x="rgdgr": ll.submit()).grid(row=2, column=0, columnspan=3, padx=5)
+        Button(self.mFrame, text="Select Location", command= lambda x="dothis": ll.saveLocation()).grid(row=2, column=2, padx=5, pady=1)
+        Button(self.mFrame, text="Process Image Change - Pure White (255,255,255)", command= lambda x="255": ll.submit(x)).grid(row=4, column=0, columnspan=3, padx=5, pady=3)
+        Button(self.mFrame, text="Process Image Change - Close to White (>245,>245,>245)", command= lambda x="245": ll.submit(x)).grid(row=5, column=0, columnspan=3, padx=5, pady=3)
         
 
 
